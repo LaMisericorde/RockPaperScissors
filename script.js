@@ -76,5 +76,66 @@ function playSingleRound(playerSelection, computerSelection) {
     return result;
 }
 
+function transformTextToValueResult(textResult) {
+    let valueResult;
+    if (textResult.includes("Win"))
+    {
+        valueResult = 0;
+    } else if (textResult.includes("Lose")) {
+        valueResult = 1;
+    } else {
+        valueResult = 2;
+    }
+    return valueResult;
+}
+
+function displayScore(playerScore, computerScore) {
+    return `${playerScore} - ${computerScore}`;
+}
+
+function game() {
+    let roundMessage;
+    let roundScore;
+    let playerScore = 0;
+    let computerScore = 0;
+    let isGameOver = false;
+
+    console.log(displayScore(playerScore, computerScore))
+    for (let gameRound = 1; gameRound <= 5; gameRound++) {
+        
+        roundMessage = playSingleRound(getPlayerChoice(), getComputerChoice());
+        roundScore = transformTextToValueResult(roundMessage);
+        console.log(roundMessage);
+        
+        switch(roundScore) {
+            case 0:
+                playerScore++;
+                break;
+            case 1:
+                computerScore++;
+                break;
+            case 2:
+                gameRound--;
+                break;
+            default:
+                console.log("Error");
+        }
+        console.log(displayScore(playerScore, computerScore));
+
+        if (playerScore == 3) {
+            console.log("You won!");
+            isGameOver = true;
+        } else if (computerScore == 3) {
+            console.log("You lost!");
+            isGameOver = true;
+        }
+
+        if (isGameOver) {
+            break;
+        }
+    }
+}
+
+game();
 
 
