@@ -1,141 +1,118 @@
-function getPlayerChoice() {
-    return prompt("Write your choice: ").toLowerCase();
-}
+// Variables
 
-function generateRandomNumber() {
+const playerChoiceBtn = document.querySelectorAll(".choice-btn");
+const scoreContainer = document.querySelector(".score-container");
+const roundMessage = document.createElement("p");
+roundMessage.classList.add("score-round-result")
+scoreContainer.insertBefore(roundMessage, scoreContainer.firstChild);
+
+const playerScoreSpan = document.querySelector(".player-score");
+const computerScoreSpan = document.querySelector(".computer-score");
+let playerScore = 0;
+let computerScore = 0;
+
+
+
+// Computer choice
+
+function getRandomNumber() {
     return Math.floor(Math.random() * 3);
 }
 
 function getComputerChoice() {
-    let computerSelection;
-    let randomNumber = generateRandomNumber();
+    let computerChoice;
+    let randomNumber = getRandomNumber();
     switch(randomNumber) {
         case 0:
-            computerSelection = "rock";
+            computerChoice = "rock";
             break;
         case 1:
-            computerSelection = "paper";
+            computerChoice = "paper";
+            break;
+        case 2:
+            computerChoice = "scissors";
             break;
         default:
-            computerSelection = "scissors";
-            break;
-
+            console.log("Error while generating the computer choice!");
     }
-    return computerSelection;
+    return computerChoice;
 }
+
+// Messages
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-function winMessage(playerSelection, computerSelection) {
-    return `You Win! ${capitalize(playerSelection)} beats ${capitalize(computerSelection)}`;
+function winMessage(playerChoice, computerChoice) {
+    return `You Win! ${capitalize(playerChoice)} beats ${capitalize(computerChoice)}`;
 }
 
-function loseMessage(playerSelection, computerSelection) {
-    return `You Lose! ${capitalize(computerSelection)} beats ${capitalize(playerSelection)}`;
+function loseMessage(playerChoice, computerChoice) {
+    return `You Lose! ${capitalize(playerChoice)} beats ${capitalize(computerChoice)}`;
 }
 
 function tieMessage() {
     return "Tie!";
 }
 
-function playSingleRound(playerSelection, computerSelection) {
+// Player choice
+
+
+playerChoiceBtn.forEach((button) => {
+    button.addEventListener("click", () => {
+        playRound(button.getAttribute("id"));    
+    });
+}); 
+
+function playRound(playerChoice) {
+    let computerChoice = getComputerChoice();
     let result;
-    switch(playerSelection) {
+    switch(playerChoice) {
         case "rock":
-            if (computerSelection == "rock") {
+            if (computerChoice == "rock") {
                 result = tieMessage();
-            } else if (computerSelection == "paper") {
-                result = loseMessage(playerSelection, computerSelection);
+            } else if (computerChoice == "paper") {
+                result = loseMessage(playerChoice, computerChoice);
+                computerScore++;
             } else {
-                result = winMessage(playerSelection, computerSelection);
+                result = winMessage(playerChoice, computerChoice);
+                playerScore++;
             }
             break;
         case "paper":
-            if (computerSelection == "rock") {
-                result = winMessage(playerSelection, computerSelection);
-            } else if (computerSelection == "paper") {
+            if (computerChoice == "rock") {
+                result = winMessage(playerChoice, computerChoice);
+                playerScore++;
+            } else if (computerChoice == "paper") {
                 result = tieMessage();
             } else {
-                result = loseMessage(playerSelection, computerSelection);
+                result = loseMessage(playerChoice, computerChoice);
+                computerScore++;
             }
             break;
         case "scissors":
-            if (computerSelection == "rock") {
-                result = loseMessage(playerSelection, computerSelection);
-            } else if (computerSelection == "paper") {
-                result = winMessage(playerSelection, computerSelection);
+            if (computerChoice == "rock") {
+                result = loseMessage(playerChoice, computerChoice);
+                computerScore++;
+            } else if (computerChoice == "paper") {
+                result = winMessage(playerChoice, computerChoice);
+                playerScore++;
             } else {
                 result = tieMessage();
             }
             break;
         default:
-            result = "Ups Something went wrong";
+            result = "Something went wrong!";
+            
     }
-    return result;
+    roundMessage.innerText = result;
+    updateScore(playerScore, computerScore)
 }
 
-function transformTextToValueResult(textResult) {
-    let valueResult;
-    if (textResult.includes("Win"))
-    {
-        valueResult = 0;
-    } else if (textResult.includes("Lose")) {
-        valueResult = 1;
-    } else {
-        valueResult = 2;
-    }
-    return valueResult;
+function updateScore(playerScore, computerScore) {
+    playerScoreSpan.innerText = playerScore;
+    computerScoreSpan.innerText = computerScore;
 }
-
-function displayScore(playerScore, computerScore) {
-    return `${playerScore} - ${computerScore}`;
-}
-
-function game() {
-    let roundMessage;
-    let roundScore;
-    let playerScore = 0;
-    let computerScore = 0;
-    let isGameOver = false;
-
-    console.log(displayScore(playerScore, computerScore))
-    for (let gameRound = 1; gameRound <= 5; gameRound++) {
-        
-        roundMessage = playSingleRound(getPlayerChoice(), getComputerChoice());
-        roundScore = transformTextToValueResult(roundMessage);
-        console.log(roundMessage);
-        
-        switch(roundScore) {
-            case 0:
-                playerScore++;
-                break;
-            case 1:
-                computerScore++;
-                break;
-            case 2:
-                gameRound--;
-                break;
-            default:
-                console.log("Error");
-        }
-        console.log(displayScore(playerScore, computerScore));
-
-        if (playerScore == 3) {
-            console.log("You won!");
-            isGameOver = true;
-        } else if (computerScore == 3) {
-            console.log("You lost!");
-            isGameOver = true;
-        }
-
-        if (isGameOver) {
-            break;
-        }
-    }
-}
-
-game();
 
 
