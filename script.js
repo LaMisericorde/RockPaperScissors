@@ -3,7 +3,8 @@
 const playerChoiceBtn = document.querySelectorAll(".choice-btn");
 const scoreContainer = document.querySelector(".score-container");
 const roundMessage = document.createElement("p");
-roundMessage.classList.add("score-round-result")
+const divBtnContainer = document.querySelector(".btn-container");
+roundMessage.classList.add("score-round-result");
 scoreContainer.insertBefore(roundMessage, scoreContainer.firstChild);
 
 const playerScoreSpan = document.querySelector(".player-score");
@@ -11,6 +12,10 @@ const computerScoreSpan = document.querySelector(".computer-score");
 let playerScore = 0;
 let computerScore = 0;
 
+const resetBtn = document.createElement("button");
+resetBtn.innerText = "Reset";
+resetBtn.classList.add("btn");
+resetBtn.classList.add("reset-btn");
 
 
 // Computer choice
@@ -107,12 +112,54 @@ function playRound(playerChoice) {
             
     }
     roundMessage.innerText = result;
-    updateScore(playerScore, computerScore)
+    updateScore(playerScore, computerScore);
+    checkGameOver(playerScore, computerScore);
 }
+
 
 function updateScore(playerScore, computerScore) {
     playerScoreSpan.innerText = playerScore;
     computerScoreSpan.innerText = computerScore;
+}
+
+function checkGameOver(playerScore, computerScore) {
+    if (playerScore == 5) {
+        finishGame("player");
+    } else if (computerScore == 5) {
+        finishGame("computer");
+    }
+}
+
+function finishGame(winner) {
+    if (winner === "player") {
+        roundMessage.innerText = "You win!";
+    } else if (winner === "computer") {
+        roundMessage.innerText = "You lose!";
+    }
+    endGame();
+}
+
+function endGame() {
+    playerChoiceBtn.forEach((button) => {
+        button.classList.add("btn-hideen");
+    });
+    divBtnContainer.classList.add("btn-hidden");
+    roundMessage.classList.add("score-round-result-end");
+    scoreContainer.appendChild(resetBtn);
+    resetBtn.classList.remove("btn-hidden");
+    resetBtn.addEventListener("click", startNewGame);
+}
+
+function startNewGame() {
+    resetBtn.classList.add("btn-hidden");
+    playerChoiceBtn.forEach((button) => {
+        button.classList.remove("btn-hidden");
+    });
+    divBtnContainer.classList.remove("btn-hidden")
+    roundMessage.innerText = "";
+    playerScore = 0;
+    computerScore = 0;
+    updateScore(playerScore, computerScore);
 }
 
 

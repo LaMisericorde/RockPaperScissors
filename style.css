@@ -21,17 +21,23 @@ body {
     display: flex;
     justify-content: center;
     gap: 75px;
+    margin-bottom: 10vh;
 }
 
 .btn {
+    display: block;
     font-size: 20px;
     font-weight: bold;
     height: 50px;
     width: 200px;
 }
 
+.reset-btn {
+    display: block;
+    margin: -5vh auto 0 auto;
+}
+
 .score-container {
-    margin-top: 10vh;
     text-align: center;
 }
 
@@ -47,4 +53,15 @@ body {
     font-weight: bold;
 }
 
+.score-text-result {
+    padding-top: 10vh;
+}
+
+.score-round-result-end {
+    font-size: 30px;
+}
+
+.btn-hidden {
+    display: none;
+}
 
