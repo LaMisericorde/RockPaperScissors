@@ -54,7 +54,7 @@ function winMessage(playerChoice, computerChoice) {
 }
 
 function loseMessage(playerChoice, computerChoice) {
-    return `You Lose! ${capitalize(playerChoice)} beats ${capitalize(computerChoice)}`;
+    return `You Lose! ${capitalize(computerChoice)} beats ${capitalize(playerChoice)}`;
 }
 
 function tieMessage() {
